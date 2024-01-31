@@ -7,17 +7,16 @@
  *
  * For the full copyright and license information, please view the file license.md that was distributed with this source code.
  */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Kdyby\FakeSession;
 
-use ArrayIterator;
-use Iterator;
+//use ArrayIterator;
+//use Iterator;
 use Kdyby;
 use Nette\Http\Session as NetteSession;
 use Nette\Http\SessionSection as NetteSessionSection;
-use SessionHandlerInterface;
+//use SessionHandlerInterface;
 
 class Session extends \Nette\Http\Session
 {
@@ -52,10 +51,12 @@ class Session extends \Nette\Http\Session
 	 */
 	private $fakeMode = FALSE;
 
+
 	public function __construct(NetteSession $originalSession)
 	{
 		$this->originalSession = $originalSession;
 	}
+
 
 	public function disableNative(): void
 	{
@@ -66,15 +67,18 @@ class Session extends \Nette\Http\Session
 		$this->fakeMode = TRUE;
 	}
 
+
 	public function enableNative(): void
 	{
 		$this->fakeMode = FALSE;
 	}
 
+
 	public function isNativeEnabled(): bool
 	{
 		return !$this->fakeMode;
 	}
+
 
 	public function start(): void
 	{
@@ -82,6 +86,7 @@ class Session extends \Nette\Http\Session
 			$this->originalSession->start();
 		}
 	}
+
 
 	public function isStarted(): bool
 	{
@@ -92,10 +97,12 @@ class Session extends \Nette\Http\Session
 		return $this->started;
 	}
 
+
 	public function setFakeStarted(bool $started): void
 	{
 		$this->started = $started;
 	}
+
 
 	public function close(): void
 	{
@@ -104,12 +111,14 @@ class Session extends \Nette\Http\Session
 		}
 	}
 
+
 	public function destroy(): void
 	{
 		if (!$this->fakeMode) {
 			$this->originalSession->destroy();
 		}
 	}
+
 
 	public function exists(): bool
 	{
@@ -120,10 +129,12 @@ class Session extends \Nette\Http\Session
 		return $this->exists;
 	}
 
+
 	public function setFakeExists(bool $exists): void
 	{
 		$this->exists = $exists;
 	}
+
 
 	public function regenerateId(): void
 	{
@@ -131,6 +142,7 @@ class Session extends \Nette\Http\Session
 			$this->originalSession->regenerateId();
 		}
 	}
+
 
 	public function getId(): string
 	{
@@ -141,10 +153,25 @@ class Session extends \Nette\Http\Session
 		return $this->id;
 	}
 
+
+	public function setName(string $name): static
+	{
+		$this->originalSession->setName($name);
+		return $this;
+	}
+
+
+	public function getName(): string
+	{
+		return $this->originalSession->getName();
+	}
+
+
 	public function setFakeId(string $id): void
 	{
 		$this->id = $id;
 	}
+
 
 	public function getSection(string $section, string $class = NetteSessionSection::class): NetteSessionSection
 	{
@@ -159,6 +186,7 @@ class Session extends \Nette\Http\Session
 		return $this->sections[$section] = parent::getSection($section, $class !== NetteSessionSection::class ? $class : SessionSection::class);
 	}
 
+
 	public function hasSection(string $section): bool
 	{
 		if (!$this->fakeMode) {
@@ -168,14 +196,16 @@ class Session extends \Nette\Http\Session
 		return isset($this->sections[$section]);
 	}
 
-	public function getIterator(): Iterator
+
+	public function getIterator(): \Iterator
 	{
 		if (!$this->fakeMode) {
 			return $this->originalSession->getIterator();
 		}
 
-		return new ArrayIterator(array_keys($this->sections));
+		return new \ArrayIterator(array_keys($this->sections));
 	}
+
 
 	public function clean(): void
 	{
@@ -184,26 +214,16 @@ class Session extends \Nette\Http\Session
 		}
 	}
 
-	public function setName(string $name): self
-	{
-		$this->originalSession->setName($name);
-		return $this;
-	}
-
-	public function getName(): string
-	{
-		return $this->originalSession->getName();
-	}
 
 	/**
 	 * @param mixed[] $options
-	 * @return static
 	 */
-	public function setOptions(array $options): self
+	public function setOptions(array $options): static
 	{
 		$this->originalSession->setOptions($options);
 		return $this;
 	}
+
 
 	/**
 	 * @return mixed[]
@@ -213,17 +233,20 @@ class Session extends \Nette\Http\Session
 		return $this->originalSession->getOptions();
 	}
 
-	public function setExpiration(?string $time): self
+
+	public function setExpiration(?string $expire): static
 	{
-		$this->originalSession->setExpiration($time);
+		$this->originalSession->setExpiration($expire);
 		return $this;
 	}
 
-	public function setCookieParameters(string $path, ?string $domain = NULL, ?bool $secure = NULL, ?string $sameSite = NULL): self
+
+	public function setCookieParameters(string $path, ?string $domain = NULL, ?bool $secure = NULL, ?string $sameSite = NULL): static
 	{
 		$this->originalSession->setCookieParameters($path, $domain, $secure, $sameSite);
 		return $this;
 	}
+
 
 	/**
 	 * @return mixed[]
@@ -233,16 +256,17 @@ class Session extends \Nette\Http\Session
 		return $this->originalSession->getCookieParameters();
 	}
 
-	public function setSavePath(string $path): self
+
+	public function setSavePath(string $path): static
 	{
 		$this->originalSession->setSavePath($path);
 		return $this;
 	}
 
-	public function setHandler(SessionHandlerInterface $handler): self
+
+	public function setHandler(\SessionHandlerInterface $handler): static
 	{
 		$this->originalSession->setHandler($handler);
 		return $this;
 	}
-
 }
