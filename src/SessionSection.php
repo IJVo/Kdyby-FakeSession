@@ -36,6 +36,43 @@ class SessionSection extends \Nette\Http\SessionSection
 
 
 	/**
+	 * Sets a variable in this session section.
+	 */
+	public function set(string $name, mixed $value, ?string $expire = null): void
+	{
+		$this->data[$name] = $value;
+
+		//if ($value === null) {
+		//$this->remove($name);
+		//} else {
+		//$this->session->autoStart(true);
+		//$this->getData()[$name] = $value;
+		//$this->setExpiration($expire, $name);
+		//}
+	}
+
+
+	/**
+	 * Gets a variable from this session section.
+	 */
+	public function get(string $name): mixed
+	{
+		if (func_num_args() > 1) {
+			throw new \ArgumentCountError(__METHOD__ . '() expects 1 arguments, given more.');
+		}
+
+		if ($this->warnOnUndefined && !array_key_exists($name, $this->data)) {
+			trigger_error(sprintf("The variable '%s' does not exist in session section", $name), E_USER_NOTICE);
+		}
+
+		return $this->data[$name];
+
+		//$this->session->autoStart(false);
+		//return $this->getData()[$name] ?? null;
+	}
+
+
+	/**
 	 * Removes a variable or whole section.
 	 * @param  string|string[]|null  $name
 	 */
@@ -86,7 +123,8 @@ class SessionSection extends \Nette\Http\SessionSection
 	 * @param string|string[] $variables list of variables / single variable to expire
 	 * @return static
 	 */
-	public function setExpiration(?string $expire, string|array|null $variables = null): static	{
+	public function setExpiration(?string $expire, string|array|null $variables = null): static
+	{
 		return $this;
 	}
 
@@ -96,6 +134,6 @@ class SessionSection extends \Nette\Http\SessionSection
 	 */
 	public function removeExpiration(string|array|null $variables = null): void
 	{
-		
+
 	}
 }
