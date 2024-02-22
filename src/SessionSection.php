@@ -39,7 +39,7 @@ class SessionSection extends \Nette\Http\SessionSection
 	 * Removes a variable or whole section.
 	 * @param  string|string[]|null  $name
 	 */
-	public function remove(string|array|null $name = null): void
+	public function remove($name = null): void
 	{
 		$this->data = [];
 	}
@@ -86,7 +86,7 @@ class SessionSection extends \Nette\Http\SessionSection
 	 * @param string|string[] $variables list of variables / single variable to expire
 	 * @return static
 	 */
-	public function setExpiration(?string $expire, string|array|null $variables = null): static	{
+	public function setExpiration($expire, $variables = null): static	{
 		return $this;
 	}
 
@@ -94,7 +94,7 @@ class SessionSection extends \Nette\Http\SessionSection
 	/**
 	 * @param string|string[] $variables list of variables / single variable to expire
 	 */
-	public function removeExpiration(string|array|null $variables = null): void
+	public function removeExpiration( $variables = null): void
 	{
 		
 	}
