@@ -7,6 +7,7 @@
  *
  * For the full copyright and license information, please view the file license.md that was distributed with this source code.
  */
+    
 declare(strict_types=1);
 
 namespace Kdyby\FakeSession;
@@ -57,7 +58,6 @@ class SessionSection extends \Nette\Http\SessionSection
 
 	/**
 	 * @param string $name
-	 * @return mixed
 	 */
 	public function &__get(string $name): mixed
 	{
@@ -86,7 +86,8 @@ class SessionSection extends \Nette\Http\SessionSection
 	 * @param string|string[] $variables list of variables / single variable to expire
 	 * @return static
 	 */
-	public function setExpiration($expire, $variables = null): static	{
+	public function setExpiration(?string $expire, array|string|null $variables = null): static
+	{
 		return $this;
 	}
 

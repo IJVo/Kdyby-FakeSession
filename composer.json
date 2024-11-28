@@ -17,7 +17,7 @@
 		"nette/http": "3.2.3"
 	},
 	"require-dev": {
-		"nette/utils": "^3.2",
+		"nette/utils": "^3.2 || ^4.0",
 		"nette/bootstrap": "3.2.*",
 		"nette/caching": "3.2.*",
 		"nette/tester": "^2.4"
