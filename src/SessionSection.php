@@ -18,7 +18,6 @@ use Nette\Http\Session as NetteSession;
 
 class SessionSection extends \Nette\Http\SessionSection
 {
-
 	/** @var mixed[] */
 	private $data = [];
 
@@ -32,43 +31,6 @@ class SessionSection extends \Nette\Http\SessionSection
 	public function getIterator(): \Iterator
 	{
 		return new \ArrayIterator($this->data);
-	}
-
-
-	/**
-	 * Sets a variable in this session section.
-	 */
-	public function set(string $name, mixed $value, ?string $expire = null): void
-	{
-		$this->data[$name] = $value;
-
-		//if ($value === null) {
-		//$this->remove($name);
-		//} else {
-		//$this->session->autoStart(true);
-		//$this->getData()[$name] = $value;
-		//$this->setExpiration($expire, $name);
-		//}
-	}
-
-
-	/**
-	 * Gets a variable from this session section.
-	 */
-	public function get(string $name): mixed
-	{
-		if (func_num_args() > 1) {
-			throw new \ArgumentCountError(__METHOD__ . '() expects 1 arguments, given more.');
-		}
-
-		if ($this->warnOnUndefined && !array_key_exists($name, $this->data)) {
-			trigger_error(sprintf("The variable '%s' does not exist in session section", $name), E_USER_NOTICE);
-		}
-
-		return $this->data[$name];
-
-		//$this->session->autoStart(false);
-		//return $this->getData()[$name] ?? null;
 	}
 
 
@@ -134,6 +96,45 @@ class SessionSection extends \Nette\Http\SessionSection
 	 */
 	public function removeExpiration(string|array|null $variables = null): void
 	{
+		
+	}
 
+
+	/**
+	 * Sets a variable in this session section.
+	 */
+	public function set(string $name, mixed $value, ?string $expire = null): void
+	{
+
+		\Testbench\IJVoLog::log('Kdyby-fake-session: SessionSection.php - set() - $name', $name);
+		\Testbench\IJVoLog::log('Kdyby-fake-session: SessionSection.php - set() - $value', $value);
+
+		$this->data[$name] = $value;
+	}
+
+
+	/**
+	 * Gets a variable from this session section.
+	 */
+	public function get(string $name): mixed
+	{
+		if (func_num_args() > 1) {
+			throw new \ArgumentCountError(__METHOD__ . '() expects 1 arguments, given more.');
+		}
+
+		if ($this->warnOnUndefined && !array_key_exists($name, $this->data)) {
+			trigger_error(sprintf("The variable '%s' does not exist in session section", $name), E_USER_NOTICE);
+		}
+
+		if (!array_key_exists($name, $this->data)) {
+			$result = null;
+		} else {
+			$result = $this->data[$name];
+		}
+
+		\Testbench\IJVoLog::log('Kdyby-fake-session: SessionSection.php - get() - $name', $name);
+		\Testbench\IJVoLog::log('Kdyby-fake-session: SessionSection.php - get() - $result', $result);
+
+		return $result;
 	}
 }
